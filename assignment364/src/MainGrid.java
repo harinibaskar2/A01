@@ -25,7 +25,7 @@ public class MainGrid extends JFrame
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS)); // stack vertically
 
         //Text above grid
-        JLabel topText = new JLabel("Click 1 = Start, Click 2 = End, Click 3 = Toggle Obstacle");
+        JLabel topText = new JLabel("Click 1 = Start, Click 2 = End, Right Click = Toggle Obstacle");
         topText.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 

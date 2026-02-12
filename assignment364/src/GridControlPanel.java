@@ -20,7 +20,7 @@ public class GridControlPanel extends JPanel
 
         JLabel label = new JLabel("Grid Size:");
 
-        //attach ActionNanny to Start button
+        //attach ActionNanny to gridSize
         gridSize.addActionListener(actionNanny);
 
         //set layout of control buttons
