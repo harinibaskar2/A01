@@ -18,8 +18,10 @@ public class MainGrid extends JFrame
     }
     public MainGrid()
     {
-        Grid grid = new Grid();
-        JPanel controlGrid = new GridControlPanel(grid);
+        GridModel model = new GridModel(10);
+        Grid grid = new Grid(model);
+        model.addPropertyChangeListener(grid);
+        JPanel controlGrid = new GridControlPanel(grid, model);
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS)); // stack vertically

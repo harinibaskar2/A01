@@ -1,76 +1,43 @@
-import java.awt.*;
+
 import java.awt.event.*;
 import javax.swing.*;
 
 public class MouseNanny extends MouseAdapter {
 
-    //timer for clicks. Click twice under one second will create blue start
-    private static final int DOUBLE_CLICK_MS = 1000;
+    private final GridModel model;
 
-    private final Grid grid;
-    private final Timer singleClickTimer;
-
-    //the cell we just clicked
-    private JLabel pendingCell;
-
-    public MouseNanny(Grid grid) {
-        this.grid = grid;
-
-        singleClickTimer = new Timer(DOUBLE_CLICK_MS, e -> {
-            if (pendingCell != null) {
-                grid.setStartCell(pendingCell); // only one start allowed
-                pendingCell = null;
-            }
-        });
-
-        singleClickTimer.setRepeats(false);
+    public MouseNanny(Grid grid, GridModel model) {
+        this.model = model;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
         JLabel cell = (JLabel) e.getSource();
+        int r = (int) cell.getClientProperty("row");
+        int c = (int) cell.getClientProperty("col");
+        if (model.isRunning())
+            return;
 
         //right click creates obstacle
         if (SwingUtilities.isRightMouseButton(e)) {
 
-            singleClickTimer.stop();
-            pendingCell = null;
-
-            Color bg = cell.getBackground();
-
-            // Don't allow obstacle on start or end
-            if (bg.equals(Color.YELLOW) || bg.equals(Color.BLUE)) {
+            CellType t = model.getCell(r, c);
+            if (t == CellType.START || t == CellType.END) {
                 return;
             }
 
-            // Toggle black/white
-            if (bg.equals(Color.BLACK)) {
-                cell.setBackground(Color.WHITE);
-            } else {
-                cell.setBackground(Color.BLACK);
-            }
-
+            
+            model.toggleObstacle(r, c);
             return;
         }
-
-
-        //the end cell
         if (e.getClickCount() == 2) {
-            singleClickTimer.stop();
-            pendingCell = null;
-
-            if (cell.getBackground().equals(Color.BLUE)) {
-                grid.clearEndCell(); // remove end
-            } else {
-                grid.setEndCell(cell); // only one end allowed
+                model.setEnd(r, c);
+                return;
             }
-            return;
-        }
+        model.setStart(r, c);
 
-        //start cell
-        pendingCell = cell;
-        singleClickTimer.restart();
+
     }
 
     @Override

@@ -6,9 +6,11 @@ public class ActionNanny implements ActionListener {
 
     //important so that ActionNanny knows what grid we are referencing
     private final Grid grid;
+    private final GridModel model;
 
-    public ActionNanny(Grid grid) {
+    public ActionNanny(Grid grid, GridModel model) {
         this.grid = grid;
+        this.model = model;
     }
 
     @Override
@@ -21,6 +23,7 @@ public class ActionNanny implements ActionListener {
 
             Integer selected = (Integer) combo.getSelectedItem();
             if (selected != null) {
+                model.reset(selected);
                 grid.SetGridSize(selected);   // ✅ resize immediately
             }
         }
